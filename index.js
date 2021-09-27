@@ -1,13 +1,12 @@
-const express = require('express');
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const io = require('socket.io')(httpServer, {
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
   cors: {
     origin: 'https://expert-task-app.herokuapp.com/',
     methods: ['GET', 'POST'],
   },
 });
+const port = process.env.PORT || 3000;
 
 let student_sum = [
   {
@@ -117,6 +116,6 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
+http.listen(port, () => {
+  console.log(`server running on ${port}`);
 });
