@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
-const student_sum = [
+let student_sum = [
   {
     id: 1,
     name: 'John Deo',
@@ -94,6 +94,20 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+
+  socket.on('get_students', () => {
+    io.emit('student_listing', student_sum);
+  });
+
+  socket.on('add_student', (student) => {
+    const new_student = {
+      id: student_sum.length + 1,
+      ...student,
+    };
+    student_sum = student_sum.concat(new_student);
+    io.emit('student_listing', student_sum);
+  });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });

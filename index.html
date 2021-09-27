@@ -10,58 +10,6 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <style>
-      body {
-        margin: 0;
-        padding-bottom: 3rem;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          Helvetica, Arial, sans-serif;
-      }
-
-      /* #form {
-        background: rgba(0, 0, 0, 0.15);
-        padding: 0.25rem;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        height: 3rem;
-        box-sizing: border-box;
-        backdrop-filter: blur(10px);
-      }
-      #input {
-        border: none;
-        padding: 0 1rem;
-        flex-grow: 1;
-        border-radius: 2rem;
-        margin: 0.25rem;
-      }
-      #input:focus {
-        outline: none;
-      }
-      #form > button {
-        background: #333;
-        border: none;
-        padding: 0 1rem;
-        margin: 0.25rem;
-        border-radius: 3px;
-        outline: none;
-        color: #fff;
-      }
-
-      #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      #messages > li {
-        padding: 0.5rem 1rem;
-      }
-      #messages > li:nth-child(odd) {
-        background: #efefef;
-      } */
-    </style>
   </head>
   <body>
     <div class="container">
@@ -117,7 +65,7 @@
                 >
               </li>
             </ul>
-            <form class="d-flex">
+            <form class="d-flex" onsubmit="">
               <input
                 class="form-control me-2"
                 type="search"
@@ -134,7 +82,7 @@
 
       <div class="row"></div>
       <div class="row">
-        <div class="col-3"></div>
+        <!-- <div class="col-3"></div> -->
         <div class="col">
           <div class="accordion" id="accordionExample">
             <div class="accordion-item">
@@ -191,7 +139,9 @@
                         >Social</span
                       >
                       <input
-                        type="text"
+                        type="number"
+                        max="100"
+                        min="0"
                         id="student-social"
                         class="form-control"
                         placeholder="Social"
@@ -204,7 +154,9 @@
                         >Science</span
                       >
                       <input
-                        type="text"
+                        type="number"
+                        max="100"
+                        min="0"
                         id="student-science"
                         class="form-control"
                         placeholder="Science"
@@ -217,7 +169,9 @@
                         >Math</span
                       >
                       <input
-                        type="text"
+                        type="number"
+                        max="100"
+                        min="0"
                         id="student-math"
                         class="form-control"
                         placeholder="Math"
@@ -226,7 +180,7 @@
                       />
                     </div>
 
-                    <button type="button" class="btn btn-outline-primary">
+                    <button type="submit" class="btn btn-outline-primary">
                       Add
                     </button>
                   </form>
@@ -235,9 +189,9 @@
             </div>
           </div>
 
-          <ul id="students-list"></ul>
+          <ul id="students-list" class="list-group"></ul>
         </div>
-        <div class="col-3"></div>
+        <!-- <div class="col-3"></div> -->
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
@@ -248,6 +202,47 @@
     ></script>
     <script>
       const socket = io();
+
+      const student_list = document.getElementById('students-list');
+      const form = document.getElementById('form');
+
+      socket.emit('get_students');
+
+      socket.on('student_listing', (data) => {
+        data.forEach((student) => {
+          const li = document.createElement('li');
+          li.classList.add('list-group-item');
+          li.innerHTML = `
+              <h5 class="card-title">${student.name}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">${student.class}</h6>
+              <p class="card-text">
+                <span class="badge bg-primary">Social: ${student.social}</span>
+                <span class="badge bg-primary">Science: ${student.science}</span>
+                <span class="badge bg-primary">Math: ${student.math}</span>
+                </p>
+                `;
+          student_list.appendChild(li);
+        });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('student-name').value;
+        const s_class = document.getElementById('student-class').value;
+        const social = document.getElementById('student-social').value;
+        const science = document.getElementById('student-science').value;
+        const math = document.getElementById('student-math').value;
+
+        socket.emit('add_student', {
+          name,
+          class: s_class,
+          social,
+          science,
+          math,
+        });
+
+        form.reset();
+      });
     </script>
   </body>
 </html>
