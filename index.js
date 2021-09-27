@@ -117,5 +117,5 @@ io.on('connection', (socket) => {
 });
 
 http.listen(port, () => {
-  console.log(`server running on ${port}`);
+  console.log(`server running on port ${port}`);
 });

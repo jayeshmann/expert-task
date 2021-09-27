@@ -80,7 +80,6 @@
         </div>
       </nav>
 
-      <div class="row"></div>
       <div class="row">
         <!-- <div class="col-3"></div> -->
         <div class="col">
@@ -92,7 +91,7 @@
                   type="button"
                   data-bs-toggle="collapse"
                   data-bs-target="#collapseOne"
-                  aria-expanded="true"
+                  aria-expanded="false"
                   aria-controls="collapseOne"
                 >
                   Add Student Data
@@ -100,7 +99,7 @@
               </h2>
               <div
                 id="collapseOne"
-                class="accordion-collapse collapse show"
+                class="accordion-collapse collapse"
                 aria-labelledby="headingOne"
                 data-bs-parent="#accordionExample"
               >
@@ -188,7 +187,9 @@
               </div>
             </div>
           </div>
-
+          <br />
+          <br />
+          <h1 class="align-item-center">Student List</h1>
           <ul id="students-list" class="list-group"></ul>
         </div>
         <!-- <div class="col-3"></div> -->
@@ -214,7 +215,7 @@
           li.classList.add('list-group-item');
           li.innerHTML = `
               <h5 class="card-title">${student.name}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">${student.class}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Class: ${student.class}</h6>
               <p class="card-text">
                 <span class="badge bg-primary">Social: ${student.social}</span>
                 <span class="badge bg-primary">Science: ${student.science}</span>
